@@ -13,21 +13,23 @@
  $db = "createaccount";
  $conn = new mysqli($dbhost, $dbuser, $dbpass,$db) or die("Connect failed: %s\n". $conn -> error);
 $tipo=$_POST['tipo'];
-
+$chassi=$_POST['chassi'];
+$adesivo=$_POST['adesivo'];
+$locado=$_POST['locado'];
 $cv=$_POST['cv'];
 $ano=$_POST['ano'];
 $telefone=$_POST['telefone'];
-$modelo=$_POST['modelo'];
+$placa=$_POST['placa'];
 $estado=$_POST['estado'];
 $cidade=$_POST['cidade'];
-$eq_user=$_POST['eq_user'];
-$sql1=mysqli_query($conn, "INSERT INTO respostas (eq_user, tipo, modelo, cv, ano, estado, cidade, telefone)VALUES('$eq_user', '$tipo', '$modelo', '$cv', '$ano', '$estado', '$cidade', '$telefone')");
+$modelo=$_POST['modelo'];
+$sql1=mysqli_query($conn, "INSERT INTO respostas (chassi, tipo, adesivo, locado, cv, ano, placa, estado, cidade, telefone, modelo)VALUES('$chassi', '$tipo', '$adesivo', '$locado', '$cv', '$ano', '$placa', '$estado', '$cidade', '$telefone', '$modelo')");
 
 ?>
 
 <center>
 <FONT FACE="Times New Roman" SIZE="5" COLOR="black">Enviado com sucesso! Aguarde um instante.<br />
-<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=https://127.0.0.1/site/cadastrar.php">
+<META HTTP-EQUIV="REFRESH" CONTENT="3; URL=https://127.0.0.1/site/nossasmaquinas">
 
 
 </center>
