@@ -2,7 +2,13 @@ import qrcode
 import keyboard
 from PIL import Image
 import mysql.connector
-import requests
+from binance.client import Client
+
+# Configuração da API da Binance
+api_key = ''
+api_secret = ''
+
+client = Client(api_key, api_secret)
 
 def calcular_valores(o_t, p_y, q_u):
     o_tyu = o_t
@@ -19,14 +25,14 @@ def calcular_precos(o_tyu, p_tyu, q_tyu, preco_por_segundo=0.0083):
 def salvar_dados_no_banco(preco_total):
     try:
         conexao = mysql.connector.connect(
-            host="SEU_HOST",
-            user="SEU_USUARIO",
-            password="SUA_SENHA",
-            database="SEU_BANCO_DE_DADOS"
+            host="",
+            user="",
+            password="",
+            database=""
         )
 
         cursor = conexao.cursor()
-        comando_sql = "INSERT INTO sua_tabela (preco_total) VALUES (%s)"
+        comando_sql = "INSERT INTO respostas (preco_total) VALUES (%s)"
         valores = (preco_total,)
         cursor.execute(comando_sql, valores)
         conexao.commit()
@@ -41,15 +47,12 @@ def salvar_dados_no_banco(preco_total):
             conexao.close()
 
 def verificar_pagamento(endereco_iota, preco_total):
-    # Substitua pela URL e pelo método correto da API que você estiver usando
-    url = f"https://api.binance.com/api/v3/account?address={endereco_iota}&amount={preco_total}"
-    headers = {
-        "X-MBX-APIKEY": "SUA_API_KEY",
-    }
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        return response.json()
-    return None
+    # Verifica o histórico de depósitos da Binance
+    depositos = client.get_deposit_history(asset='IOTA')
+    for deposito in depositos:
+        if deposito['address'] == endereco_iota and float(deposito['amount']) >= preco_total:
+            return True
+    return False
 
 while True:
     # Introdução
@@ -63,6 +66,11 @@ while True:
         o_t = float(input("Digite o valor em segundos que gostaria (o_t): ").replace(',', '.'))
         p_y = float(input("Digite o valor em minutos que gostaria (p_y): ").replace(',', '.'))
         q_u = float(input("Digite o valor em horas que gostaria (q_u): ").replace(',', '.'))
+
+        # Verifica se os valores são negativos
+        if o_t < 0 or p_y < 0 or q_u < 0:
+            print("Os valores não podem ser negativos. Por favor, insira valores válidos.\n")
+            continue
 
         # Verifica se todos os valores são zero
         if o_t == 0 and p_y == 0 and q_u == 0:
@@ -97,8 +105,9 @@ while True:
     while True:
         if keyboard.is_pressed('enter'):
             # Gera o código QR de pagamento
-            endereco_iota = "YOUR_IOTA_ADDRESS"
-            qr_data = f"iota:{endereco_iota}?amount={preco_total}"
+            endereco_iota = "iota1qpg8a6dr4zlegluepxkasaxddsu7pxr4rlpcjskg8ph6kj9nkf6dys2jt69"
+            # Gera o QR Code com os dados corrigidos
+            qr_data = f"iota:{endereco_iota}?amount={preco_total:.8f}"  # Formatação adequada
             qr_img = qrcode.make(qr_data)
             qr_img.save("pagamento_iota_qrcode.png")
 
@@ -106,11 +115,15 @@ while True:
             img = Image.open("pagamento_iota_qrcode.png")
             img.show()
 
-            # Espera a confirmação do usuário
-            print("\nVerifique o código QR. Pressione Enter para confirmar o pagamento ou Esc para voltar ao início.")
+            # Instruções para a confirmação
+            print("\nVerifique o código QR e realize o pagamento.")
+            print("Pressione Enter para verificar o pagamento ou Esc para voltar ao início.")
+
+            # Aguarda a confirmação do usuário para verificar o pagamento
             while True:
                 if keyboard.is_pressed('enter'):
-                    # Verifica o pagamento
+                    # Verifica o pagamento usando a API da Binance
+                    print("Verificando o pagamento...")
                     pagamento_confirmado = verificar_pagamento(endereco_iota, preco_total)
                     if pagamento_confirmado:
                         print("Pagamento confirmado com sucesso!")
