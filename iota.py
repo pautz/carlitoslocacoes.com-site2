@@ -2,13 +2,25 @@ import qrcode
 import keyboard
 from PIL import Image
 import mysql.connector
-from binance.client import Client
+from binance.client import Client as BinanceClient
+import os
 
-# Configuração da API da Binance
-api_key = ''
-api_secret = ''
+# Definindo as variáveis de ambiente diretamente no script
+os.environ['BINANCE_API_KEY'] = 'binanceapikeyaqui'
+os.environ['BINANCE_API_SECRET'] = 'binanceapisecretaqui'
 
-client = Client(api_key, api_secret)
+# Obtendo as variáveis de ambiente
+api_key = os.getenv('BINANCE_API_KEY')
+api_secret = os.getenv('BINANCE_API_SECRET')
+
+# Verificando se as variáveis de ambiente foram definidas corretamente
+print(f"API Key: {api_key}")
+print(f"API Secret: {api_secret}")
+
+if not api_key or not api_secret:
+    raise Exception("API Key and Secret are required")
+
+client = BinanceClient(api_key, api_secret)
 
 def calcular_valores(o_t, p_y, q_u):
     o_tyu = o_t
