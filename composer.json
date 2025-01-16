@@ -1,7 +1,7 @@
 {
     "name": "pautz/carlitoslocacoes.com",
     "description": "Carlito’s Locações",
-    "license": "UFSM",
+    "license": "COPYRIGHT 2025 <CARLITO PAUTZ>",
     "require": {
         "php": ">=7.4"
     },
