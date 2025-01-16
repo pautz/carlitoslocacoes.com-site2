@@ -1,0 +1,12 @@
+{
+    "name": "pautz/carlitoslocacoes.com",
+    "description": "Carlito’s Locações",
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
