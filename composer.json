@@ -1,13 +1,6 @@
 {
-    "name": "pautz/carlitoslocacoes.com",
-    "description": "Carlito’s Locações",
-    "license": "COPYRIGHT 2025 <CARLITO PAUTZ>",
-    "require": {
-        "php": ">=7.4"
-    },
-    "autoload": {
-        "psr-4": {
-            "App\\": "src/"
-        }
-    }
+    "name": "Carlito's Locações",
+    "description": "Carlito's Locações - Linhas de Transmissões",
+    "license": "Carlito Pautz",  // or use a valid SPDX license identifier
+    ...
 }
