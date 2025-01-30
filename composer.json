@@ -1,6 +1,5 @@
 {
     "name": "Carlito's Locações",
     "description": "Carlito's Locações - Linhas de Transmissões",
-    "license": "Carlito Pautz",  // or use a valid SPDX license identifier
-    ...
+    "license": "Carlito Pautz"
 }
